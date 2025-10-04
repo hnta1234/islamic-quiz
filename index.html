@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ISLAMIq — Full Quiz App</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="nav">
+        <div class="logo">ISLAMIq</div>
+        <div class="controls">
+          <div id="userLabel" class="muted">Not signed in</div>
+          <button id="btnLogin" class="btn">Log in / Sign up</button>
+          <button id="btnHome" class="btn">Home</button>
+        </div>
+      </header>
+
+      <!-- HOME -->
+      <section id="home" class="screen active">
+        <div class="home">
+          <h2 style="color: #dff9ea; margin: 0">Welcome to ISLAMIq</h2>
+          <p style="max-width: 760px; color: var(--muted)">
+            Dark glowing Islamic quiz app — many quizzes included. Click start
+            and you'll be asked to sign up or log in by email, then choose a
+            category and take the quiz. Per-question timer is enabled.
+          </p>
+          <div id="startBtn" class="start">START QUIZ</div>
+          <small style="color: var(--muted)"
+            >Full-page flow · Dark mode · Per-question timer</small
+          >
+        </div>
+      </section>
+
+      <!-- AUTH -->
+      <section id="auth" class="screen">
+        <div style="max-width: 520px; margin: 28px auto">
+          <h3 style="color: var(--accent)">Sign up / Log in</h3>
+          <div
+            style="
+              background: linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0.01),
+                transparent
+              );
+              padding: 16px;
+              border-radius: 10px;
+              border: 1px solid rgba(255, 255, 255, 0.02);
+            "
+          >
+            <label style="color: var(--muted)">Email</label>
+            <input id="emailIn" type="email" placeholder="you@example.com" />
+            <label style="color: var(--muted)">Password</label>
+            <input
+              id="passIn"
+              type="password"
+              placeholder="password (demo localStorage)"
+            />
+            <div
+              style="
+                display: flex;
+                gap: 8px;
+                justify-content: flex-end;
+                margin-top: 8px;
+              "
+            >
+              <button id="toggleAuth" class="btn">Switch to Sign up</button>
+              <button id="authSubmit" class="btn primary">Continue</button>
+            </div>
+            <p style="color: var(--muted); margin-top: 8px; font-size: 13px">
+              Demo uses browser localStorage. For production you must use
+              backend auth and hashed passwords.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CATEGORIES -->
+      <section id="categories" class="screen">
+        <h3 style="color: var(--accent); text-align: center">
+          Choose a category
+        </h3>
+        <div class="grid" id="catGrid"></div>
+      </section>
+
+      <!-- QUIZ -->
+      <section id="quiz" class="screen">
+        <div class="quiz-wrap">
+          <div class="quiz-main">
+            <div class="quiz-header">
+              <div class="muted" id="progressLabel">Question 1 / 1</div>
+              <div class="timer" id="timer">01:00</div>
+            </div>
+            <div class="question-box">
+              <div class="qtext" id="qtext">Question text</div>
+              <div class="options" id="options"></div>
+            </div>
+
+            <div class="controls-row">
+              <div class="nav-buttons">
+                <button id="prevBtn" class="btn">Previous</button>
+                <button id="nextBtn" class="btn">Next</button>
+              </div>
+              <div>
+                <button id="submitBtn" class="btn primary">Submit Quiz</button>
+              </div>
+            </div>
+          </div>
+
+          <aside class="sidebar">
+            <div class="info">
+              <div><strong>Category:</strong> <span id="infoCat">-</span></div>
+              <div style="margin-top: 6px">
+                <strong>Question:</strong> <span id="infoTotal">0</span>
+              </div>
+              <div style="margin-top: 6px">
+                <strong>Per-question time:</strong>
+                <span id="infoTime">60s</span>
+              </div>
+            </div>
+
+            <div class="info" style="margin-top: 12px">
+              <div><strong>Progress</strong></div>
+              <div
+                id="infoProgress"
+                style="margin-top: 8px; color: var(--muted)"
+              >
+                0 answered
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- RESULTS -->
+      <section id="results" class="screen">
+        <div
+          class="results-grid"
+          style="display: flex; gap: 18px; align-items: flex-start"
+        >
+          <div style="flex: 1">
+            <h3 style="color: var(--accent)">Quiz Results</h3>
+            <div
+              style="
+                background: linear-gradient(
+                  180deg,
+                  rgba(255, 255, 255, 0.01),
+                  transparent
+                );
+                padding: 16px;
+                border-radius: 10px;
+                border: 1px solid rgba(255, 255, 255, 0.02);
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <div>
+                  <div class="score" id="scoreText">0 / 0</div>
+                  <div style="color: var(--muted)" id="scorePercent">0%</div>
+                </div>
+              </div>
+
+              <div style="margin-top: 14px">
+                <div><strong>Correct</strong></div>
+                <div
+                  id="correctWrap"
+                  style="
+                    margin-top: 8px;
+                    display: flex;
+                    gap: 8px;
+                    flex-wrap: wrap;
+                  "
+                ></div>
+
+                <div style="margin-top: 10px"><strong>Wrong</strong></div>
+                <div
+                  id="wrongWrap"
+                  style="
+                    margin-top: 8px;
+                    display: flex;
+                    gap: 8px;
+                    flex-wrap: wrap;
+                  "
+                ></div>
+              </div>
+
+              <div style="margin-top: 12px; display: flex; gap: 8px">
+                <button id="btnHomeFromResults" class="btn">Home</button>
+                <button id="btnRetry" class="btn primary">Retake</button>
+              </div>
+            </div>
+          </div>
+
+          <aside class="sidebar">
+            <div class="info">
+              <div><strong>Community Stats (this category)</strong></div>
+              <div style="margin-top: 8px; color: var(--muted)">
+                This week: <strong id="statWeek">0</strong>
+              </div>
+              <div style="margin-top: 6px; color: var(--muted)">
+                This month: <strong id="statMonth">0</strong>
+              </div>
+              <div style="margin-top: 6px; color: var(--muted)">
+                All time: <strong id="statAll">0</strong>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <footer>
+        <div class="muted">© ISLAMIq — Made with ❤️ by Hannah</div>
+        <div class="muted">
+          “And say: My Lord, increase me in knowledge.” — Quran
+        </div>
+      </footer>
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>
