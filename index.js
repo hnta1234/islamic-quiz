@@ -316,50 +316,59 @@
       /* -------------------------
    Auth (local demo)
    ------------------------- */
-      let authMode = "login"; // or signup
-      toggleAuth.textContent = "Switch to Sign up";
-      toggleAuth.onclick = () => {
-        authMode = authMode === "login" ? "signup" : "login";
-        toggleAuth.textContent =
-          authMode === "login" ? "Switch to Sign up" : "Switch to Log in";
-        authSubmit.textContent =
-          authMode === "login" ? "Continue" : "Create account";
-        el("auth").querySelector("h3").textContent =
-          authMode === "login" ? "Sign in" : "Sign up";
-      };
-      authSubmit.onclick = () => {
-        const email = emailIn.value.trim().toLowerCase();
-        const pass = passIn.value.trim();
-        if (!email || !pass) {
-          alert("Provide email and password");
-          return;
-        }
-        if (authMode === "signup") {
-          if (USERS.find((u) => u.email === email)) {
-            alert("User exists, please sign in");
-            return;
-          }
-          const name = email.split("@")[0];
-          USERS.push({ email, password: pass, name });
-          save("islamiq_users", USERS);
-          save("islamiq_current_user", { email, name });
-          refreshUserUI();
-          emailIn.value = "";
-          passIn.value = "";
-          show("categories");
-        } else {
-          const u = USERS.find((u) => u.email === email && u.password === pass);
-          if (!u) {
-            alert("Invalid credentials");
-            return;
-          }
-          save("islamiq_current_user", { email: u.email, name: u.name });
-          refreshUserUI();
-          emailIn.value = "";
-          passIn.value = "";
-          show("categories");
-        }
-      };
+    let authMode = "login"; // or signup
+toggleAuth.textContent = "Switch to Sign up";
+
+toggleAuth.onclick = () => {
+  authMode = authMode === "login" ? "signup" : "login";
+  toggleAuth.textContent =
+    authMode === "login" ? "Switch to Sign up" : "Switch to Log in";
+  authSubmit.textContent =
+    authMode === "login" ? "Continue" : "Create account";
+  el("auth").querySelector("h3").textContent =
+    authMode === "login" ? "Sign in" : "Sign up";
+};
+
+authSubmit.onclick = () => {
+  const email = emailIn.value.trim().toLowerCase();
+  const pass = passIn.value.trim();
+
+  if (!email || !pass) {
+    alert("Provide email and password");
+    return;
+  }
+
+  if (authMode === "signup") {
+    // Check if email already exists (case-insensitive)
+    if (USERS.some((u) => u.email.toLowerCase() === email)) {
+      alert("User exists, please sign in");
+      return;
+    }
+    const name = email.split("@")[0];
+    USERS.push({ email, password: pass, name });
+    save("islamiq_users", USERS);
+    save("islamiq_current_user", { email, name });
+    refreshUserUI();
+    emailIn.value = "";
+    passIn.value = "";
+    show("categories");
+  } else {
+    // Login: match email (case-insensitive) and exact password
+    const u = USERS.find(
+      (u) => u.email.toLowerCase() === email && u.password === pass
+    );
+    if (!u) {
+      alert("Invalid credentials");
+      return;
+    }
+    save("islamiq_current_user", { email: u.email, name: u.name });
+    refreshUserUI();
+    emailIn.value = "";
+    passIn.value = "";
+    show("categories");
+  }
+};
+
 
       /* -------------------------
    Categories render
